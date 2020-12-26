@@ -45,25 +45,25 @@ int modular_exp(int base,int exp,int mod)
     }
     return ans;
 }
-int inverse_modulo(int base,int mod)
+int inv_mod(int base,int mod)
 {
-	return modular_exp(base,mod-2,mod);
+    return modular_exp(base,mod-2,mod);
 }
 int fact[N];
 void pre_compute()
 {
-	fact[0] = 1;
-	for(int i = 1;i<N;i++)
-	{
-		fact[i] = i*fact[i-1];
-		fact[i]%=MOD;
-	}
+    fact[0] = 1;
+    for(int i = 1;i<N;i++)
+    {
+        fact[i] = i*fact[i-1];
+        fact[i]%=MOD;
+    }
 }
 int nCr(int n, int r)
 {
-	if(r>=n or r==0)
-		return 1;
-	return ( (fact[n]%MOD * inverse_modulo(fact[r],MOD)%MOD) * inverse_modulo(fact[n-r],MOD))%MOD;
+    if(r>=n or r==0)
+        return 1;
+    return ( (fact[n]%MOD * inv_mod(fact[r],MOD)%MOD) * inv_mod(fact[n-r],MOD))%MOD;
 }
 int32_t main()
 {
