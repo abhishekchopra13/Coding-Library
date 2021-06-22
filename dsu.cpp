@@ -19,7 +19,7 @@ typedef vector<ii>   vii;
 //    data_set;
 #define rep(i,l,r)   for(int i=(l);i<(r);i++)
 #define deb(x)     cout << (#x) << " = " << (x) << endl
-#define here cout << " Hey baitch!!\n";
+#define here cout << " Hey!!\n";
 #define  pb push_back
 #define  F  first
 #define  S  second
@@ -30,24 +30,78 @@ const int MOD = 1e9+7;
 const int MOD1 = 998244353;
 const int N = 2e5+5;
 const int INF = 1000111000111000111LL;
+const ld EPS = 1e-12;
 const ld PI = 3.141592653589793116;
-vector <int> prime;
-bool is_composite[N];
 
-void sieve (int n) {
-	std::fill (is_composite, is_composite + n, false);
-	for (int i = 2; i < n; ++i) {
-		if (!is_composite[i]) prime.push_back (i);
-		for (int j = 0; j < prime.size () && i * prime[j] < n; ++j) {
-			is_composite[i * prime[j]] = true;
-			if (i % prime[j] == 0) break;
+struct dsu
+{
+	vector<int> a, bulk;
+	int components;
+	dsu(int n)
+	{
+		a.resize(n+1);
+		bulk.resize(n+1,1);
+		this->components = n;
+		for(int i = 0; i <= n; i++) {
+			a[i] = i;
 		}
+	};
+	int root(int i)
+	{
+	    while(a[i]!=i)
+	    {
+	        i = a[i];
+	        a[i]= a[a[i]];
+	    }
+	    return i;
 	}
+	void merge(int x,int y)
+	{
+		if(root(x) != root(y))	
+			components--;
+		else
+			return;
+	    if(bulk[root(x)]>=bulk[root(y)])
+	    {
+	    	bulk[root(x)]+=bulk[root(y)];
+	    	a[root(y)] = a[root(x)];
+	    }else
+	    {
+	    	bulk[root(y)]+=bulk[root(x)];
+	    	a[root(x)] = a[root(y)];
+	    }
+	}
+};
+
+int testcase()
+{
+	int n,q; cin >> n >> q;
+	dsu cow(n);
+	set< ii > vis;
+	while(q--)
+	{
+		int l,r;
+		cin >> l >> r;
+		while(l < r && cow.components > 1)
+		{
+			if(vis.count({l,r}))
+				break;
+			cow.merge(l,r);
+			vis.insert({l,r});
+			l++,r--;
+		}
+		cout << cow.components << '\n';
+	}
+	return 0;
 }
+
 int32_t main()
 {
 	SYNC
-	sieve(100);
-	
+	int T; T = 1;
+	while(T--)
+	{
+		testcase();
+	}
 	return 0;
 }

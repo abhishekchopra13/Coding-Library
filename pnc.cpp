@@ -33,34 +33,30 @@ const int MOD1 = 998244353;
 const int N = 2e5+5;
 const int INF = 1000111000111000111LL;
 const ld PI = 3.1415926535898;
-int modular_exp(int base,int exp,int mod)
+
+// Combnitorics Snippet, Call precompute()
+int fact[N]; 
+int modular_exp(int base, int exp, int mod = MOD) 
 {
     int ans =1;
     while(exp)
     {
-        if(exp%2)   ans = ans%mod*base%mod;
+        if(exp % 2)   ans = ans%mod*base%mod;
         base = (base%mod*base%mod)%mod;
-        exp/=2;
-        ans%=mod;
+        exp /= 2;
+        ans %= mod;
     }
     return ans;
 }
-int inv_mod(int base,int mod)
-{
+int inv_mod(int base,int mod) {
     return modular_exp(base,mod-2,mod);
 }
-int fact[N];
-void pre_compute()
-{
+void pre_compute() {
     fact[0] = 1;
     for(int i = 1;i<N;i++)
-    {
-        fact[i] = i*fact[i-1];
-        fact[i]%=MOD;
-    }
+        fact[i] = (i * fact[i-1]) % MOD;
 }
-int nCr(int n, int r)
-{
+int nCr(int n, int r) {
     if(r>=n or r==0)
         return 1;
     return ( (fact[n]%MOD * inv_mod(fact[r],MOD)%MOD) * inv_mod(fact[n-r],MOD))%MOD;
