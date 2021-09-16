@@ -47,7 +47,7 @@ void sieve (int n) {
 int32_t main()
 {
 	SYNC
-	sieve(100);
-	
+	sieve(1e6);
+	cout << prime.size();;
 	return 0;
 }

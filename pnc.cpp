@@ -35,7 +35,8 @@ const int INF = 1000111000111000111LL;
 const ld PI = 3.1415926535898;
 
 // Combnitorics Snippet, Call precompute()
-int fact[N]; 
+int fact[N];
+int ifact[N];
 int modular_exp(int base, int exp, int mod = MOD) 
 {
     int ans =1;
@@ -53,17 +54,27 @@ int inv_mod(int base,int mod) {
 }
 void pre_compute() {
     fact[0] = 1;
-    for(int i = 1;i<N;i++)
+    for(int i = 1; i < N; i++) {
         fact[i] = (i * fact[i-1]) % MOD;
+    }
+    ifact[N - 1] = inv_mod(fact[N - 1], MOD);
+    for (int i = N - 2; i >= 0; i--) {
+        ifact[i] = ((i + 1) * ifact[i + 1]) % MOD;
+    }
 }
 int nCr(int n, int r) {
-    if(r>=n or r==0)
+    if (r > n or r < 0)
+        return 0;
+    if(r == n or r == 0)
         return 1;
-    return ( (fact[n]%MOD * inv_mod(fact[r],MOD)%MOD) * inv_mod(fact[n-r],MOD))%MOD;
+    return ( (fact[n] % MOD * ifact[r] % MOD) * ifact[n - r] ) % MOD;
 }
+
+
 int32_t main()
 {
 	SYNC
 	pre_compute();
+    cout << nCr(5, 3);
     return 0;
 }
