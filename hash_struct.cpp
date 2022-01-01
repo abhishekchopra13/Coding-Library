@@ -116,15 +116,12 @@ struct str_hash
         }
         this->pre = pre_compute;
         this->pre1 = pre_compute1;
-        //etch(pre_compute);
-        //etch(pre_compute1);
     }
     pair<int, int> get_hash(int l, int r)
     {
         if(l==0)    return {pre[r], pre1[r]};
         int res = (pre[r] - pre[l-1]+mod_hash)%mod_hash;
         res *= p_inv[l];
-        //debug(p_inv[l]);
         int res1 = (pre1[r] - pre1[l-1]+mod_hash1)%mod_hash1;
         res1 *= p_inv1[l];
         return {res % mod_hash, res1 % mod_hash1};

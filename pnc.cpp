@@ -35,23 +35,30 @@ const int INF = 1000111000111000111LL;
 const ld PI = 3.1415926535898;
 
 // Combnitorics Snippet, Call precompute()
-int fact[N];
-int ifact[N];
+int fact[N], ifact[N];
 int modular_exp(int base, int exp, int mod = MOD) 
 {
-    int ans =1;
-    while(exp)
-    {
-        if(exp % 2)   ans = ans%mod*base%mod;
-        base = (base%mod*base%mod)%mod;
-        exp /= 2;
-        ans %= mod;
+    int ans = 1;
+    while (exp) {
+        if(exp % 2)   ans = ans % mod * base % mod;
+        base = (base % mod * base % mod) % mod;
+        exp /= 2; ans %= mod;
     }
     return ans;
 }
-int inv_mod(int base,int mod) {
-    return modular_exp(base,mod-2,mod);
+int inv_mod(int base, int mod = MOD) {
+    return modular_exp(base, mod - 2, mod);
 }
+void add(int &a, int b) {
+    a += b;
+    if (a >= MOD)
+        a -= MOD;
+}
+void mul(int &a, int b) {
+    a *= b;
+    a %= MOD;
+}
+
 void pre_compute() {
     fact[0] = 1;
     for(int i = 1; i < N; i++) {
