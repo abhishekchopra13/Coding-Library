@@ -83,9 +83,7 @@ int inverse_modulo(int base,int mod)
 {
     return modular_exp(base,mod-2,mod);
 }
-int p_inv[N];
-int p_inv1[N];
-int dp[N][N][3];
+int p_inv[N], p_inv1[N];
 
 
 struct str_hash
@@ -96,7 +94,6 @@ struct str_hash
     str_hash(string s) {
         this->s = s;
         compute_hash();
-        //etch(pre);
     }
     void compute_hash()
     {
@@ -128,59 +125,7 @@ struct str_hash
     }
 };
 
-void solve()
-{
-    string s, t;
-    cin >> s >> t;
-    reverse(all(t));
-    str_hash v1(s), v2(t);
-    memset(dp, 0, sizeof dp);
-    int n = sz(s), m = sz(t);
-    int ans = 0;
-    for (int j = 0; j < m; j++) {
-        if (t[j] == s[0]) {
-            dp[0][j][2] = dp[0][j][1] = dp[0][j][0] = 1;
-            ans = 1;
-        }
-    }
-    for (int i = 0; i < n; i++) {
-        if (s[i] == t[0]) {
-            dp[i][0][2] = dp[i][0][1] = dp[i][0][0] = 1;
-            ans = 1;
-        }
-    }
-    // cout << s << '\n' << t << '\n';
-    // if (v1.get_hash(0, 1) == v2.get_hash(1,2)) {
-    //     here;
-    // }
-    for (int i = 1; i < n; i++) {
-        for (int j = 1; j < m; j++) {
-            dp[i][j][1] = max(dp[i-1][j][1], dp[i][j-1][1]);
-            ans = max(ans, dp[i][j][1]);
-            if (s[i] != t[j])   continue;
-            int lo = 1, hi = min(i+1, j+1);
-            while (lo < hi) {
-                int len = (lo + hi + 1)/2;
-                if (v1.get_hash(i-len+1, i) == v2.get_hash(j-len+1, j)) {
-                    lo = len;
-                } else {
-                    hi = len - 1;
-                }
-            }
-            dp[i][j][1] = max(dp[i][j][1], lo);
-            dp[i][j][2] = lo;
-            if (i-lo >= 0 && j-lo >= 0) {
-                dp[i][j][2] += dp[i-lo][j-lo][1];
-            }
-            ans = max({ans, dp[i][j][1], dp[i][j][2], lo});
-        }
-    }
-    cout << 2*ans << '\n';
-}
-
-int32_t main()
-{
-    SYNC
+void pre_all() {
     int inv = inverse_modulo(p,mod_hash);
     p_inv[0] = 1;
     for(int i = 1; i < N; i++) p_inv[i] = (inv * p_inv[i-1])%mod_hash;
@@ -188,11 +133,11 @@ int32_t main()
     int inv1 = inverse_modulo(p1,mod_hash1);
     p_inv1[0] = 1;
     for(int i = 1; i < N; i++) p_inv1[i] = (inv1 * p_inv1[i-1])%mod_hash1; 
-    
-    int T; cin >> T;
-    while(T--)
-    {
-        solve();
-    }
+}
+
+int32_t main()
+{
+    SYNC
+
     return 0;
 }
